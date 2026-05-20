@@ -77,16 +77,11 @@ CREATE TRIGGER check_and_decrement_stock
 CREATE OR REPLACE FUNCTION create_profile_on_signup()
 RETURNS TRIGGER AS $$
 BEGIN
-  IF NEW.raw_user_meta_data->>'given_name' IS NULL OR 
-     NEW.raw_user_meta_data->>'family_name' IS NULL THEN
-    RAISE EXCEPTION 'name and surname are required';
-  END IF;
-
-  INSERT INTO profiles (id, name, surname)
+  INSERT INTO public.profiles (id, name, surname)
   VALUES (
     NEW.id,
-    NEW.raw_user_meta_data->>'given_name',
-    NEW.raw_user_meta_data->>'family_name'
+    COALESCE(NEW.raw_user_meta_data->>'given_name', ''),
+    COALESCE(NEW.raw_user_meta_data->>'family_name', '')
   );
   RETURN NEW;
 END;

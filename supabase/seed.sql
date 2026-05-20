@@ -61,7 +61,7 @@ BEGIN
     -- orders
     INSERT INTO orders (id, user_id, shipping_address, recipient_name)
     VALUES
-        (order1_id, user1_id, 'Muscle Ave 123, London', 'Ga; Volk'),
+        (order1_id, user1_id, 'Muscle Ave 123, London', 'Gal Volk'),
         (order2_id, user2_id, 'Ob sotocju 6', 'Lara Novak'),
         (order3_id, user1_id, 'Trg 1, Ljubljana', 'Mark Dolenc');
 
