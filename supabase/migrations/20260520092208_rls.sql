@@ -3,6 +3,7 @@ ALTER TABLE items ENABLE ROW LEVEL SECURITY;
 ALTER TABLE items_history ENABLE ROW LEVEL SECURITY;
 ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
 ALTER TABLE order_items ENABLE ROW LEVEL SECURITY;
+ALTER TABLE archived_orders ENABLE ROW LEVEL SECURITY;
 
 -- profiles: users can only CRUD their own profile
 CREATE POLICY "users can crud own profile"
@@ -61,3 +62,8 @@ CREATE POLICY "users can insert own order items"
       AND user_id = auth.uid()
     )
   );
+
+CREATE POLICY "authenticated users can view archived orders"
+  ON archived_orders FOR SELECT
+  TO authenticated
+  USING (true);

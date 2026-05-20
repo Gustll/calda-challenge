@@ -40,3 +40,9 @@ CREATE TABLE order_items (
   created_at timestamptz DEFAULT now() NOT NULL,
   updated_at timestamptz DEFAULT now() NOT NULL
 );
+
+CREATE TABLE archived_orders (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  total numeric(10,2) NOT NULL,
+  archived_at timestamptz DEFAULT now() NOT NULL
+);

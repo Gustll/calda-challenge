@@ -13,6 +13,7 @@ DECLARE
     order1_id uuid := gen_random_uuid();
     order2_id uuid := gen_random_uuid();
     order3_id uuid := gen_random_uuid();
+    order4_id uuid := gen_random_uuid();
 BEGIN
     -- users
     INSERT INTO auth.users (
@@ -64,6 +65,17 @@ BEGIN
         (order2_id, user2_id, 'Ob sotocju 6', 'Lara Novak'),
         (order3_id, user1_id, 'Trg 1, Ljubljana', 'Mark Dolenc');
 
+    -- old order for cron job testing (older than 1 week)
+    INSERT INTO orders (id, user_id, shipping_address, recipient_name, created_at, updated_at)
+    VALUES (
+        order4_id,
+        user1_id,
+        'Old Street 111, London',
+        'Gal Volk',
+        '2026-01-01 00:00:00+00',
+        '2026-01-01 00:00:00+00'
+    );
+
     -- order items
     INSERT INTO order_items (order_id, item_id, quantity)
     VALUES
@@ -72,6 +84,8 @@ BEGIN
         (order2_id, item3_id, 1),
         (order2_id, item4_id, 2),
         (order3_id, item5_id, 3),
-        (order3_id, item1_id, 1);
+        (order3_id, item1_id, 1),
+        (order4_id, item1_id, 1),
+        (order4_id, item2_id, 2);
 END;
 $$;
