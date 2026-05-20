@@ -44,13 +44,17 @@ CREATE POLICY "authenticated users can view items history"
   TO authenticated
   USING (true);
 
--- orders: users can only CRUD their own orders
+-- orders: users can only CR their own orders
 -- user_id is locked to auth.uid() on both read and write
 -- prevents users from seeing or creating orders for other users
-CREATE POLICY "users can crud own orders"
-  ON orders
+CREATE POLICY "users can select own orders"
+  ON orders FOR SELECT
   TO authenticated
-  USING (user_id = auth.uid())
+  USING (user_id = auth.uid());
+
+CREATE POLICY "users can insert own orders"
+  ON orders FOR INSERT
+  TO authenticated
   WITH CHECK (user_id = auth.uid());
 
 -- order_items: users can only access order items belonging to their own orders
