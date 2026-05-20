@@ -41,7 +41,7 @@ BEGIN
     RETURN NEW;
   END IF;
 END;
-$$ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
 
 -- attach to items table
 -- AFTER so the history reflects the final committed state
@@ -96,3 +96,11 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 CREATE TRIGGER on_auth_user_created
   AFTER INSERT ON auth.users
   FOR EACH ROW EXECUTE FUNCTION create_profile_on_signup();
+
+CREATE OR REPLACE FUNCTION get_other_orders_total(current_order_id uuid)
+RETURNS numeric AS $$
+  SELECT COALESCE(SUM(oi.quantity * i.price), 0)
+  FROM order_items oi
+  JOIN items i ON i.id = oi.item_id
+  WHERE oi.order_id != current_order_id;
+$$ LANGUAGE sql SECURITY DEFINER;
